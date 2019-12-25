@@ -54,8 +54,7 @@
 
             <div class="section-small pt-0">
                 <div class="course-grid-slider" uk-slider>
-                    <smooth-scroll text="Browse Web Development" highlight="Courses" link="{{ route('courses.index') }}"></smooth-scroll>
-
+                    <smooth-scroll highlight="Courses"></smooth-scroll>
                     <browse-courses x-class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid"></browse-courses>
                 </div>
             </div>

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Course;
+use App\Category;
+use App\Instructor;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -15,6 +17,16 @@ class CourseController extends Controller
     public function index()
     {
         return view('courses.index');
+    }
+
+    /**
+     * Display a listing of the resource based on Category/Topic
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function categorize(Category $category)
+    {
+        return view('courses.categorize', compact('category'));
     }
 
     /**
@@ -41,12 +53,14 @@ class CourseController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param  \App\Category $category
+     * @param  \App\Instructor $author
      * @param  \App\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function show(Course $course)
+    public function show(Category $category, Instructor $author, Course $course)
     {
-        //
+        dd($category, $author, $course);
     }
 
     /**

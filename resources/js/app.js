@@ -31,6 +31,9 @@ files.keys().map(key =>
  */
 import routes from "./routes";
 import store from "./store";
+import plugins from "./assets/custom-plugins";
+
+Vue.use(plugins);
 
 const router = new VueRouter({
     base: process.env.MIX_BASE_URL,
@@ -50,5 +53,8 @@ const router = new VueRouter({
 new Vue({
     el: "#wrapper",
     router,
-    store
+    store,
+    created() {
+        this.$store.dispatch("fetchCourses");
+    }
 });

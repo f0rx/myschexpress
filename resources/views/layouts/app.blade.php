@@ -86,5 +86,7 @@
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/simplebar.js') }}"></script>
     <script src="{{ asset('js/main.js') }}"></script>
+
+    @stack('script')
 </body>
 </html>

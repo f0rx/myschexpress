@@ -1,27 +1,69 @@
 <template>
-    <div class="grid-slider-header">
-        <div>
-            <h4 class="uk-text-truncate">
-                {{ text }}
-                <a :href="link" class="text-success">{{ highlight }}</a>
-            </h4>
-        </div>
-        <div class="grid-slider-header-link">
-            <a :href="link" class="button transparent uk-visible@m">
-                View all
-            </a>
-            <a href="#" class="slide-nav-prev" uk-slider-item="previous"></a>
-            <a href="#" class="slide-nav-next" uk-slider-item="next"></a>
-        </div>
+  <div class="grid-slider-header">
+    <div>
+      <h4 class="uk-text-truncate">
+        {{ realText }}
+        <a :href="realLink" class="text-success">{{ highlight }}</a>
+      </h4>
     </div>
+    <div class="grid-slider-header-link">
+      <a href="courses" class="button transparent uk-visible@m">View all</a>
+      <a href="#" class="slide-nav-prev" uk-slider-item="previous"></a>
+      <a href="#" class="slide-nav-next" uk-slider-item="next"></a>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-    props: {
-        text: { type: String, required: true, default: () => "" },
-        highlight: { type: String, required: true, default: () => "" },
-        link: { type: String, required: true, default: () => "#" }
+  data() {
+    return {
+      featuredCourse: {}
+    };
+  },
+
+  props: {
+    text: { type: String, required: false, default: () => "" },
+    highlight: { type: String, required: true, default: () => "" },
+    link: { type: String, required: false, default: () => "#" }
+  },
+
+  computed: {
+    realText() {
+      if (this.text == "" || this.text == null)
+        if (
+          this.featuredCourse != null &&
+          this.featuredCourse.hasOwnProperty("category")
+        )
+          return this.featuredCourse.category.name;
+
+      return this.text;
+    },
+
+    realLink() {
+      if (this.text == "" || this.text == null)
+        if (
+          this.featuredCourse != null &&
+          this.featuredCourse.hasOwnProperty("category")
+        )
+          return this.route();
+
+      return this.link;
     }
+  },
+
+  methods: {
+    route() {
+      return `courses/${this.featuredCourse.category.slug}/u/0`;
+    }
+  },
+
+  created() {
+    this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "setCourses" && state.courses != null) {
+        this.featuredCourse = state.featuredCourse;
+      }
+    });
+  }
 };
 </script>

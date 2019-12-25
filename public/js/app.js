@@ -86,6 +86,18 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./node_modules/@babel/runtime/regenerator/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@babel/runtime/regenerator/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime.js");
+
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Courses/BrowseCourses.vue?vue&type=script&lang=js&":
 /*!********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Courses/BrowseCourses.vue?vue&type=script&lang=js& ***!
@@ -133,160 +145,82 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      courses: []
+    };
+  },
+  props: {
+    xClass: {
+      type: String,
+      required: false
+    },
+    coursesProp: {
+      type: Array,
+      require: false
+    }
+  },
+  watch: {
+    coursesProp: {
+      handler: function handler(val) {
+        console.log("watching...", val);
+      },
+      deep: true // Next task watch this prop so that fetchCourses action can update if this property is not empty
+
+    }
+  },
+  methods: {
+    route: function route(course) {
+      // Format the route for each course
+      var category_slug = course.category.slug;
+      var course_slug = course.slug;
+      var author_slug = course.authors[0].id;
+      return "".concat("/myschexpress/public", "/courses/").concat(category_slug, "/").concat(author_slug, "/").concat(course_slug);
+    },
+    bookmarkCourse: function bookmarkCourse(course, event) {
+      console.log("Bookmark this Course - " + course.title);
+      console.log(event.target);
+    }
+  },
+  created: function created() {
+    var _this = this;
+
+    this.$store.subscribe(function (mutation, state) {
+      if (mutation.type === "setCourses" && state.courses != null) {
+        _this.courses = _this.coursesProp != null ? _this.coursesProp : state.courses;
+      }
+    });
+    Event.$on("selected", function (data) {
+      if (data.includes("Latest")) {
+        _this.courses = _this.$store.state.courses;
+        return;
+      }
+
+      var shuffle = [];
+
+      _this.$store.state.courses.map(function (course) {
+        course.tabs.map(function (tag) {
+          if (tag.includes(data)) shuffle.push(course);
+        });
+      });
+
+      _this.courses = shuffle;
+    });
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Courses/Tabs.vue?vue&type=script&lang=js&":
+/*!***********************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Courses/Tabs.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
 //
 //
 //
@@ -301,11 +235,37 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    xClass: {
-      type: String,
-      required: false
+  data: function data() {
+    return {
+      tags: []
+    };
+  },
+  methods: {
+    tabIsSelected: function tabIsSelected(tag) {
+      this.tags.map(function (el) {
+        return el.active = false;
+      }); // Default all tabs to not-active
+
+      tag.active = true; // Set the currently selected tab as active
+
+      Event.$emit('selected', tag.name); // Emit a "selected" event to indicate a change of tab
     }
+  },
+  created: function created() {
+    var _this = this;
+
+    this.$store.subscribe(function (mutation, state) {
+      if (mutation.type === "setCourses" && state.tags != null) {
+        var self = _this;
+        state.tags.map(function (tag) {
+          self.tags.push({
+            name: tag,
+            active: false
+          }); // Push all other tags from the store
+        });
+        _this.tags[0].active = true; // Set the first tag as active
+      }
+    });
   }
 });
 
@@ -387,6 +347,50 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/layouts/partials/Categories.vue?vue&type=script&lang=js&":
+/*!**************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/layouts/partials/Categories.vue?vue&type=script&lang=js& ***!
+  \**************************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      categories: []
+    };
+  },
+  methods: {
+    route: function route(category) {
+      return "".concat("/myschexpress/public", "/courses/").concat(category.slug, "/u/0");
+    }
+  },
+  created: function created() {
+    var _this = this;
+
+    this.$store.subscribe(function (mutation, state) {
+      if (mutation.type === "setCourses" && state.courses != null) {
+        _this.categories = state.categories;
+      }
+    });
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/layouts/partials/SmoothScroll.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/layouts/partials/SmoothScroll.vue?vue&type=script&lang=js& ***!
@@ -412,13 +416,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      featuredCourse: {}
+    };
+  },
   props: {
     text: {
       type: String,
-      required: true,
+      required: false,
       "default": function _default() {
         return "";
       }
@@ -432,11 +439,35 @@ __webpack_require__.r(__webpack_exports__);
     },
     link: {
       type: String,
-      required: true,
+      required: false,
       "default": function _default() {
         return "#";
       }
     }
+  },
+  computed: {
+    realText: function realText() {
+      if (this.text == "" || this.text == null) if (this.featuredCourse != null && this.featuredCourse.hasOwnProperty("category")) return this.featuredCourse.category.name;
+      return this.text;
+    },
+    realLink: function realLink() {
+      if (this.text == "" || this.text == null) if (this.featuredCourse != null && this.featuredCourse.hasOwnProperty("category")) return this.route();
+      return this.link;
+    }
+  },
+  methods: {
+    route: function route() {
+      return "courses/".concat(this.featuredCourse.category.slug, "/u/0");
+    }
+  },
+  created: function created() {
+    var _this = this;
+
+    this.$store.subscribe(function (mutation, state) {
+      if (mutation.type === "setCourses" && state.courses != null) {
+        _this.featuredCourse = state.featuredCourse;
+      }
+    });
   }
 });
 
@@ -632,108 +663,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-/* harmony default export */ __webpack_exports__["default"] = ({//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  computed: {
+    home: function home() {
+      return "/myschexpress/public";
+    }
+  }
 });
 
 /***/ }),
@@ -1016,6 +951,743 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 process.umask = function() { return 0; };
+
+
+/***/ }),
+
+/***/ "./node_modules/regenerator-runtime/runtime.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/regenerator-runtime/runtime.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * Copyright (c) 2014-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+var runtime = (function (exports) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  exports.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunctionPrototype[toStringTagSymbol] =
+    GeneratorFunction.displayName = "GeneratorFunction";
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      prototype[method] = function(arg) {
+        return this._invoke(method, arg);
+      };
+    });
+  }
+
+  exports.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  exports.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      if (!(toStringTagSymbol in genFun)) {
+        genFun[toStringTagSymbol] = "GeneratorFunction";
+      }
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  exports.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return Promise.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return Promise.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration.
+          result.value = unwrapped;
+          resolve(result);
+        }, function(error) {
+          // If a rejected Promise was yielded, throw the rejection back
+          // into the async generator function so it can be handled there.
+          return invoke("throw", error, resolve, reject);
+        });
+      }
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new Promise(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  exports.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  exports.async = function(innerFn, outerFn, self, tryLocsList) {
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList)
+    );
+
+    return exports.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        // Note: ["return"] must be used for ES3 parsing compatibility.
+        if (delegate.iterator["return"]) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  Gp[toStringTagSymbol] = "Generator";
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  exports.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  exports.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+
+  // Regardless of whether this script is executing as a CommonJS module
+  // or not, return the runtime object so that we can declare the variable
+  // regeneratorRuntime in the outer scope, which allows this module to be
+  // injected easily by `bin/regenerator --include-runtime script.js`.
+  return exports;
+
+}(
+  // If this script is executing as a CommonJS module, use module.exports
+  // as the regeneratorRuntime namespace. Otherwise create a new empty
+  // object. Either way, the resulting object will be used to initialize
+  // the regeneratorRuntime variable at the top of this file.
+   true ? module.exports : undefined
+));
+
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  // This module should not be running in strict mode, so the above
+  // assignment should always work unless something is misconfigured. Just
+  // in case runtime.js accidentally runs in strict mode, we can escape
+  // strict mode using a global Function call. This could conceivably fail
+  // if a Content Security Policy forbids using Function, but in that case
+  // the proper solution is to fix the accidental strict mode problem. If
+  // you've misconfigured your bundler to force strict mode and applied a
+  // CSP to forbid Function, and you're not willing to fix either of those
+  // problems, please detail your unique predicament in a GitHub issue.
+  Function("r", "regeneratorRuntime = r")(runtime);
+}
 
 
 /***/ }),
@@ -1308,306 +1980,68 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { class: _vm.xClass, attrs: { "uk-grid": "" } }, [
-    _vm._m(0),
-    _vm._v(" "),
-    _vm._m(1),
-    _vm._v(" "),
-    _vm._m(2),
-    _vm._v(" "),
-    _vm._m(3),
-    _vm._v(" "),
-    _vm._m(4),
-    _vm._v(" "),
-    _vm._m(5)
-  ])
+  return _c(
+    "div",
+    { class: _vm.xClass, attrs: { "uk-grid": "" } },
+    _vm._l(_vm.courses, function(course, index) {
+      return _c("div", { key: index }, [
+        _c("a", { attrs: { href: _vm.route(course) } }, [
+          _c("div", { staticClass: "course-card" }, [
+            _c("div", { staticClass: "course-card-thumbnail" }, [
+              _c("img", { attrs: { src: "images/course/" + index + ".png" } }),
+              _vm._v(" "),
+              _c("span", { staticClass: "play-button-trigger" })
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "course-card-body" }, [
+              _c("div", { staticClass: "course-card-info" }, [
+                _c("div", [
+                  _c("span", {
+                    staticClass: "catagroy",
+                    domProps: { innerHTML: _vm._s(course.category.name) }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", [
+                  _c("i", {
+                    staticClass: "icon-feather-bookmark icon-small",
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.bookmarkCourse(course, $event)
+                      }
+                    }
+                  })
+                ])
+              ]),
+              _vm._v(" "),
+              _c("h4", { domProps: { innerHTML: _vm._s(course.title) } }),
+              _vm._v(" "),
+              _c("p", { domProps: { innerHTML: _vm._s(course.summary) } }),
+              _vm._v(" "),
+              _vm._m(0, true)
+            ])
+          ])
+        ])
+      ])
+    }),
+    0
+  )
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("a", { attrs: { href: "course-intro.html" } }, [
-        _c("div", { staticClass: "course-card" }, [
-          _c("div", { staticClass: "course-card-thumbnail " }, [
-            _c("img", { attrs: { src: "images/course/3.png" } }),
-            _vm._v(" "),
-            _c("span", { staticClass: "play-button-trigger" })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "course-card-body" }, [
-            _c("div", { staticClass: "course-card-info" }, [
-              _c("div", [
-                _c("span", { staticClass: "catagroy" }, [_vm._v("JavaScript")])
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _c("i", { staticClass: "icon-feather-bookmark icon-small" })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("h4", [_vm._v("The Complete JavaScript From")]),
-            _vm._v(" "),
-            _c("p", [
-              _vm._v(
-                "\n                        JavaScript is how you build interactivity on the\n                        web. Take this course to learn\n                    "
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "course-card-footer" }, [
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-film" }),
-                _vm._v(" 12 Lectures\n                        ")
-              ]),
-              _vm._v(" "),
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-clock" }),
-                _vm._v(" 25 Hours")
-              ])
-            ])
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("a", { attrs: { href: "course-intro.html" } }, [
-        _c("div", { staticClass: "course-card" }, [
-          _c("div", { staticClass: "course-card-thumbnail " }, [
-            _c("img", { attrs: { src: "images/course/2.png" } }),
-            _vm._v(" "),
-            _c("span", { staticClass: "play-button-trigger" })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "course-card-body" }, [
-            _c("div", { staticClass: "course-card-info" }, [
-              _c("div", [
-                _c("span", { staticClass: "catagroy" }, [_vm._v("Angular")])
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _c("i", { staticClass: "icon-feather-bookmark icon-small" })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("h4", [_vm._v("Learn Angular Fundamentals")]),
-            _vm._v(" "),
-            _c("p", [
-              _vm._v(
-                "\n                        Learn how to build and launch React web applications\n                        using React\n                    "
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "course-card-footer" }, [
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-film" }),
-                _vm._v(" 14 Lectures\n                        ")
-              ]),
-              _vm._v(" "),
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-clock" }),
-                _vm._v(" 55 Hours")
-              ])
-            ])
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("a", { attrs: { href: "course-intro.html" } }, [
-        _c("div", { staticClass: "course-card" }, [
-          _c("div", { staticClass: "course-card-thumbnail " }, [
-            _c("img", { attrs: { src: "images/course/1.png" } }),
-            _vm._v(" "),
-            _c("span", { staticClass: "play-button-trigger" })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "course-card-body" }, [
-            _c("div", { staticClass: "course-card-info" }, [
-              _c("div", [
-                _c("span", { staticClass: "catagroy" }, [_vm._v("HTML")])
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _c("i", { staticClass: "icon-feather-bookmark icon-small" })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("h4", [_vm._v("Ultimate Web Developer Course")]),
-            _vm._v(" "),
-            _c("p", [
-              _vm._v(
-                "\n                        HTML is the building blocks of the web. It gives\n                        pages structure and applies ..\n                    "
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "course-card-footer" }, [
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-film" }),
-                _vm._v(" 33 Lectures\n                        ")
-              ]),
-              _vm._v(" "),
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-clock" }),
-                _vm._v(" 26 Hours")
-              ])
-            ])
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("a", { attrs: { href: "course-intro.html" } }, [
-        _c("div", { staticClass: "course-card" }, [
-          _c("div", { staticClass: "course-card-thumbnail " }, [
-            _c("img", { attrs: { src: "images/course/1.png" } }),
-            _vm._v(" "),
-            _c("span", { staticClass: "play-button-trigger" })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "course-card-body" }, [
-            _c("div", { staticClass: "course-card-info" }, [
-              _c("div", [
-                _c("span", { staticClass: "catagroy" }, [_vm._v("HTML")])
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _c("i", { staticClass: "icon-feather-bookmark icon-small" })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("h4", [_vm._v("Ultimate Web Developer Course")]),
-            _vm._v(" "),
-            _c("p", [
-              _vm._v(
-                "\n                        HTML is the building blocks of the web. It gives\n                        pages structure and applies ..\n                    "
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "course-card-footer" }, [
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-film" }),
-                _vm._v(" 33 Lectures\n                        ")
-              ]),
-              _vm._v(" "),
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-clock" }),
-                _vm._v(" 26 Hours")
-              ])
-            ])
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("a", { attrs: { href: "course-intro.html" } }, [
-        _c("div", { staticClass: "course-card" }, [
-          _c("div", { staticClass: "course-card-thumbnail " }, [
-            _c("img", { attrs: { src: "images/course/1.png" } }),
-            _vm._v(" "),
-            _c("span", { staticClass: "play-button-trigger" })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "course-card-body" }, [
-            _c("div", { staticClass: "course-card-info" }, [
-              _c("div", [
-                _c("span", { staticClass: "catagroy" }, [_vm._v("HTML")])
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _c("i", { staticClass: "icon-feather-bookmark icon-small" })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("h4", [_vm._v("Ultimate Web Developer Course")]),
-            _vm._v(" "),
-            _c("p", [
-              _vm._v(
-                "\n                        HTML is the building blocks of the web. It gives\n                        pages structure and applies ..\n                    "
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "course-card-footer" }, [
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-film" }),
-                _vm._v(" 33 Lectures\n                        ")
-              ]),
-              _vm._v(" "),
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-clock" }),
-                _vm._v(" 26 Hours")
-              ])
-            ])
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("a", { attrs: { href: "course-intro.html" } }, [
-        _c("div", { staticClass: "course-card" }, [
-          _c("div", { staticClass: "course-card-thumbnail " }, [
-            _c("img", { attrs: { src: "images/course/1.png" } }),
-            _vm._v(" "),
-            _c("span", { staticClass: "play-button-trigger" })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "course-card-body" }, [
-            _c("div", { staticClass: "course-card-info" }, [
-              _c("div", [
-                _c("span", { staticClass: "catagroy" }, [_vm._v("HTML")])
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _c("i", { staticClass: "icon-feather-bookmark icon-small" })
-              ])
-            ]),
-            _vm._v(" "),
-            _c("h4", [_vm._v("Ultimate Web Developer Course")]),
-            _vm._v(" "),
-            _c("p", [
-              _vm._v(
-                "\n                        HTML is the building blocks of the web. It gives\n                        pages structure and applies ..\n                    "
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "course-card-footer" }, [
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-film" }),
-                _vm._v(" 33 Lectures\n                        ")
-              ]),
-              _vm._v(" "),
-              _c("h5", [
-                _c("i", { staticClass: "icon-feather-clock" }),
-                _vm._v(" 26 Hours")
-              ])
-            ])
-          ])
-        ])
+    return _c("div", { staticClass: "course-card-footer" }, [
+      _c("h5", [
+        _c("i", { staticClass: "icon-feather-film" }),
+        _vm._v(" 12 Lectures\n            ")
+      ]),
+      _vm._v(" "),
+      _c("h5", [
+        _c("i", { staticClass: "icon-feather-clock" }),
+        _vm._v(" 25 Hours\n            ")
       ])
     ])
   }
@@ -1801,6 +2235,53 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Courses/Tabs.vue?vue&type=template&id=047a0900&":
+/*!***************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Courses/Tabs.vue?vue&type=template&id=047a0900& ***!
+  \***************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    _vm._l(_vm.tags, function(tag, index) {
+      return _c(
+        "li",
+        {
+          key: index,
+          class: { "uk-active": tag.active },
+          on: {
+            click: function($event) {
+              return _vm.tabIsSelected(tag)
+            }
+          }
+        },
+        [
+          _c("a", {
+            attrs: { href: "#" },
+            domProps: { innerHTML: _vm._s(tag.name) }
+          })
+        ]
+      )
+    }),
+    0
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/layouts/mobile/mobile-header.vue?vue&type=template&id=839fb708&":
 /*!*******************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/layouts/mobile/mobile-header.vue?vue&type=template&id=839fb708& ***!
@@ -1916,6 +2397,41 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/layouts/partials/Categories.vue?vue&type=template&id=10651c58&":
+/*!******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/layouts/partials/Categories.vue?vue&type=template&id=10651c58& ***!
+  \******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    _vm._l(_vm.categories, function(category, index) {
+      return _c("li", { key: index }, [
+        _c("a", { attrs: { href: _vm.route(category) } }, [
+          _c("i", { staticClass: "uil-brush-alt" }),
+          _vm._v("\n      " + _vm._s(category.name) + "\n    ")
+        ])
+      ])
+    }),
+    0
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/layouts/partials/SmoothScroll.vue?vue&type=template&id=3c0a9852&":
 /*!********************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/layouts/partials/SmoothScroll.vue?vue&type=template&id=3c0a9852& ***!
@@ -1934,21 +2450,31 @@ var render = function() {
   return _c("div", { staticClass: "grid-slider-header" }, [
     _c("div", [
       _c("h4", { staticClass: "uk-text-truncate" }, [
-        _vm._v("\n            " + _vm._s(_vm.text) + "\n            "),
-        _c("a", { staticClass: "text-success", attrs: { href: _vm.link } }, [
-          _vm._v(_vm._s(_vm.highlight))
-        ])
+        _vm._v("\n      " + _vm._s(_vm.realText) + "\n      "),
+        _c(
+          "a",
+          { staticClass: "text-success", attrs: { href: _vm.realLink } },
+          [_vm._v(_vm._s(_vm.highlight))]
+        )
       ])
     ]),
     _vm._v(" "),
-    _c("div", { staticClass: "grid-slider-header-link" }, [
+    _vm._m(0)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "grid-slider-header-link" }, [
       _c(
         "a",
         {
           staticClass: "button transparent uk-visible@m",
-          attrs: { href: _vm.link }
+          attrs: { href: "courses" }
         },
-        [_vm._v("\n            View all\n        ")]
+        [_vm._v("View all")]
       ),
       _vm._v(" "),
       _c("a", {
@@ -1961,9 +2487,8 @@ var render = function() {
         attrs: { href: "#", "uk-slider-item": "next" }
       })
     ])
-  ])
-}
-var staticRenderFns = []
+  }
+]
 render._withStripped = true
 
 
@@ -2046,433 +2571,235 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "side-nav uk-animation-slide-left-medium" }, [
+    _c("div", { staticClass: "side-nav-bg" }),
+    _vm._v(" "),
+    _c("div", { staticClass: "logo uk-visible@s" }, [
+      _c("a", { attrs: { href: _vm.home } }, [
+        _c("i", { staticClass: "uil-graduation-hat" })
+      ])
+    ]),
+    _vm._v(" "),
+    _c("ul", [
+      _c("li", [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "side-menu-slide" }, [
+          _c("div", { staticClass: "side-menu-slide-content" }, [
+            _c("ul", { attrs: { "data-simplebar": "" } }, [_c("categories")], 1)
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(1),
+      _vm._v(" "),
+      _vm._m(2),
+      _vm._v(" "),
+      _vm._m(3),
+      _vm._v(" "),
+      _vm._m(4)
+    ]),
+    _vm._v(" "),
+    _vm._m(5)
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      { staticClass: "side-nav uk-animation-slide-left-medium" },
-      [
-        _c("div", { staticClass: "side-nav-bg" }),
+    return _c("a", { attrs: { href: "#" } }, [
+      _c("i", { staticClass: "uil-play-circle" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", { attrs: { href: "book.html" } }, [
+        _c("i", { staticClass: "uil-book-alt" }),
         _vm._v(" "),
-        _c("div", { staticClass: "logo uk-visible@s" }, [
-          _c("a", { attrs: { href: "dashboard.html" } }, [
-            _c("i", { staticClass: "uil-graduation-hat" })
-          ])
+        _c("span", { staticClass: "tooltips" }, [_vm._v("Book")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", { attrs: { href: "episode.html" } }, [
+        _c("i", { staticClass: "uil-youtube-alt" }),
+        _vm._v(" "),
+        _c("span", { staticClass: "tooltips" }, [_vm._v("Episodes")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", { attrs: { href: "blog-1.html" } }, [
+        _c("i", { staticClass: "uil-file-alt" }),
+        _vm._v(" "),
+        _c("span", { staticClass: "tooltips" }, [_vm._v("Blog")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c(
+        "a",
+        {
+          attrs: {
+            href: "#",
+            "uk-toggle": "target: #searchbox; cls: is-active"
+          }
+        },
+        [_c("i", { staticClass: "uil-search-alt" })]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("ul", { staticClass: "uk-position-bottom" }, [
+      _c("li", [
+        _c("a", { attrs: { href: "#" } }, [
+          _c("i", { staticClass: "uil-paint-tool" })
         ]),
         _vm._v(" "),
-        _c("ul", [
-          _c("li", [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("i", { staticClass: "uil-play-circle" })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "side-menu-slide" }, [
-              _c("div", { staticClass: "side-menu-slide-content" }, [
-                _c("ul", { attrs: { "data-simplebar": "" } }, [
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-brush-alt" }),
-                      _vm._v(" Web Development\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-android-alt" }),
-                      _vm._v(" Mobile App\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-bag-alt" }),
-                      _vm._v(" Business\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-window" }),
-                      _vm._v(" IT Software\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-palette" }),
-                      _vm._v(" Desings\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-megaphone" }),
-                      _vm._v(" Marketing\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-life-ring" }),
-                      _vm._v(" Life Style\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-camera" }),
-                      _vm._v(" Photography\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-medkit" }),
-                      _vm._v(" Health Fitness\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-music" }),
-                      _vm._v(" Music\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-shopping-cart-alt" }),
-                      _vm._v(" Ecommerce\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-utensils-alt" }),
-                      _vm._v(" Food cooking\n              ")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c("a", { attrs: { href: "courses.html" } }, [
-                      _c("i", { staticClass: "uil-lightbulb-alt" }),
-                      _vm._v(" Teaching academy\n              ")
-                    ])
-                  ])
-                ])
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("a", { attrs: { href: "book.html" } }, [
-              _c("i", { staticClass: "uil-book-alt" }),
+        _c(
+          "div",
+          {
+            attrs: {
+              "uk-drop":
+                "pos: right-bottom;mode: click; offset: 10;animation: uk-animation-slide-right-small"
+            }
+          },
+          [
+            _c("div", { staticClass: "uk-card-default rounded p-0" }, [
+              _c("h5", { staticClass: "mb-0 p-3 px-4 bg-light" }, [
+                _vm._v("Night mode")
+              ]),
               _vm._v(" "),
-              _c("span", { staticClass: "tooltips" }, [_vm._v("Book")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("a", { attrs: { href: "episode.html" } }, [
-              _c("i", { staticClass: "uil-youtube-alt" }),
-              _vm._v(" "),
-              _c("span", { staticClass: "tooltips" }, [_vm._v("Episodes")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("a", { attrs: { href: "blog-1.html" } }, [
-              _c("i", { staticClass: "uil-file-alt" }),
-              _vm._v(" "),
-              _c("span", { staticClass: "tooltips" }, [_vm._v("Blog")])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("i", { staticClass: "uil-layers" })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "side-menu-slide" }, [
-              _c("div", { staticClass: "side-menu-slide-content" }, [
-                _c("ul", { attrs: { "uk-accordion": "" } }, [
-                  _c("li", [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "uk-accordion-title",
-                        attrs: { href: "#" }
-                      },
-                      [
-                        _c("i", { staticClass: "uil-layers" }),
-                        _vm._v(" Pages\n              ")
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-accordion-content" }, [
-                      _c("a", { attrs: { href: "page-pricing.html" } }, [
-                        _vm._v("Pricing")
-                      ]),
-                      _vm._v(" "),
-                      _c("a", { attrs: { href: "page-faq.html" } }, [
-                        _vm._v("faq")
-                      ]),
-                      _vm._v(" "),
-                      _c("a", { attrs: { href: "page-term.html" } }, [
-                        _vm._v("term")
-                      ]),
-                      _vm._v(" "),
-                      _c("a", { attrs: { href: "page-privacy.html" } }, [
-                        _vm._v("Privacy")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        { attrs: { href: "specialty-comming-soon.html" } },
-                        [_vm._v("Comming soon")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        { attrs: { href: "specialty-maintanence.html" } },
-                        [_vm._v("Maintanence")]
-                      )
-                    ])
+              _c("div", { staticClass: "p-3 px-4" }, [
+                _c("p", [
+                  _vm._v(
+                    "Turns the light surfaces of the page dark, creating an experience ideal for night."
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "uk-flex" }, [
+                  _c("p", { staticClass: "uk-text-small text-muted" }, [
+                    _vm._v("DARK THEME")
                   ]),
                   _vm._v(" "),
-                  _c("li", [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "uk-accordion-title",
-                        attrs: { href: "#" }
-                      },
-                      [
-                        _c("i", { staticClass: "uil-sign-out-alt" }),
-                        _vm._v(" authentication\n              ")
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-accordion-content" }, [
-                      _c("a", { attrs: { href: "form-login.html" } }, [
-                        _vm._v("Login")
-                      ]),
-                      _vm._v(" "),
-                      _c("a", { attrs: { href: "form-register.html" } }, [
-                        _vm._v("Register")
-                      ]),
-                      _vm._v(" "),
-                      _c("a", { attrs: { href: "form-modern-login.html" } }, [
-                        _vm._v("Simple Register")
-                      ]),
-                      _vm._v(" "),
-                      _c("a", { attrs: { href: "form-modern-singup.html" } }, [
-                        _vm._v("Simple Register")
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("li", [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "uk-accordion-title",
-                        attrs: { href: "#" }
-                      },
-                      [
-                        _c("i", { staticClass: "uil-code" }),
-                        _vm._v(" Development\n              ")
-                      ]
-                    ),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-accordion-content" }, [
-                      _c(
-                        "a",
-                        { attrs: { href: "development-elements.html" } },
-                        [_vm._v("Elements")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "a",
-                        { attrs: { href: "development-compounents.html" } },
-                        [_vm._v("Components")]
-                      ),
-                      _vm._v(" "),
-                      _c("a", { attrs: { href: "development-icons.html" } }, [
-                        _vm._v("Icons")
-                      ])
-                    ])
-                  ])
-                ])
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c(
-              "a",
-              {
-                attrs: {
-                  href: "#",
-                  "uk-toggle": "target: #searchbox; cls: is-active"
-                }
-              },
-              [_c("i", { staticClass: "uil-search-alt" })]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("ul", { staticClass: "uk-position-bottom" }, [
-          _c("li", [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("i", { staticClass: "uil-paint-tool" })
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                attrs: {
-                  "uk-drop":
-                    "pos: right-bottom ;mode:click ; offset: 10;animation: uk-animation-slide-right-small"
-                }
-              },
-              [
-                _c("div", { staticClass: "uk-card-default rounded p-0" }, [
-                  _c("h5", { staticClass: "mb-0 p-3 px-4 bg-light" }, [
-                    _vm._v("Night mode")
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "p-3 px-4" }, [
-                    _c("p", [
-                      _vm._v(
-                        "Turns the light surfaces of the page dark, creating an experience ideal for night."
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "uk-flex" }, [
-                      _c("p", { staticClass: "uk-text-small text-muted" }, [
-                        _vm._v("DARK THEME")
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "span",
-                        {
-                          staticClass: "btn-night-mode",
-                          attrs: { href: "#", id: "night-mode" }
-                        },
-                        [
-                          _c(
-                            "label",
-                            { staticClass: "btn-night-mode-switch" },
-                            [_c("span", { staticClass: "uk-switch-button" })]
-                          )
-                        ]
-                      )
-                    ])
-                  ])
-                ])
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("a", { attrs: { href: "#" } }, [
-              _c("span", { staticClass: "icon-feather-user" })
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                attrs: {
-                  "uk-drop":
-                    "pos: right-bottom ;mode:click ; offset: 10;animation: uk-animation-slide-right-small"
-                }
-              },
-              [
-                _c("div", { staticClass: "uk-card-default rounded p-0" }, [
                   _c(
-                    "a",
+                    "span",
                     {
-                      staticClass: "p-0",
-                      attrs: { href: "user-profile.html" }
+                      staticClass: "btn-night-mode",
+                      attrs: { href: "#", id: "night-mode" }
                     },
                     [
-                      _c("div", { staticClass: "dropdown-user-details" }, [
-                        _c("div", { staticClass: "dropdown-user-avatar" }, [
-                          _c("img", {
-                            attrs: {
-                              src: "assets/images/avatars/avatar-2.jpg",
-                              alt: ""
-                            }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("div", { staticClass: "dropdown-user-name" }, [
-                          _vm._v(
-                            "\n                Richard Ali\n                "
-                          ),
-                          _c("span", [_vm._v("Students")])
-                        ])
+                      _c("label", { staticClass: "btn-night-mode-switch" }, [
+                        _c("span", { staticClass: "uk-switch-button" })
                       ])
                     ]
-                  ),
-                  _vm._v(" "),
-                  _c("ul", { staticClass: "dropdown-menu" }, [
-                    _c("li", [
-                      _c("a", { attrs: { href: "#" } }, [
-                        _c("i", {
-                          staticClass: "icon-material-outline-dashboard"
-                        }),
-                        _vm._v(" Dashboard\n              ")
-                      ])
+                  )
+                ])
+              ])
+            ])
+          ]
+        )
+      ]),
+      _vm._v(" "),
+      _c("li", [
+        _c("a", { attrs: { href: "#" } }, [
+          _c("span", { staticClass: "icon-feather-user" })
+        ]),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            attrs: {
+              "uk-drop":
+                "pos: right-bottom ;mode:click ; offset: 10;animation: uk-animation-slide-right-small"
+            }
+          },
+          [
+            _c("div", { staticClass: "uk-card-default rounded p-0" }, [
+              _c(
+                "a",
+                { staticClass: "p-0", attrs: { href: "user-profile.html" } },
+                [
+                  _c("div", { staticClass: "dropdown-user-details" }, [
+                    _c("div", { staticClass: "dropdown-user-avatar" }, [
+                      _c("img", {
+                        attrs: {
+                          src: "assets/images/avatars/avatar-2.jpg",
+                          alt: ""
+                        }
+                      })
                     ]),
                     _vm._v(" "),
-                    _c("li", [
-                      _c("a", { attrs: { href: "user-profile-edit.html" } }, [
-                        _c("i", { staticClass: "icon-feather-settings" }),
-                        _vm._v(" Account Settings\n              ")
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c(
-                        "a",
-                        { staticClass: "text-grey", attrs: { href: "#" } },
-                        [
-                          _c("i", { staticClass: "icon-feather-star" }),
-                          _vm._v(" Upgrade To Premium\n              ")
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", { staticClass: "menu-divider" }),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c("a", { attrs: { href: "#" } }, [
-                        _c("i", { staticClass: "icon-feather-help-circle" }),
-                        _vm._v(" Help\n              ")
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("li", [
-                      _c("a", { attrs: { href: "page-login.html" } }, [
-                        _c("i", { staticClass: "icon-feather-log-out" }),
-                        _vm._v(" Sing Out\n              ")
-                      ])
+                    _c("div", { staticClass: "dropdown-user-name" }, [
+                      _vm._v("\n                Richard Ali\n                "),
+                      _c("span", [_vm._v("Students")])
                     ])
                   ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("ul", { staticClass: "dropdown-menu" }, [
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("i", { staticClass: "icon-material-outline-dashboard" }),
+                    _vm._v(" Dashboard\n              ")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "user-profile-edit.html" } }, [
+                    _c("i", { staticClass: "icon-feather-settings" }),
+                    _vm._v(" Account Settings\n              ")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { staticClass: "text-grey", attrs: { href: "#" } }, [
+                    _c("i", { staticClass: "icon-feather-star" }),
+                    _vm._v(" Upgrade To Premium\n              ")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", { staticClass: "menu-divider" }),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "#" } }, [
+                    _c("i", { staticClass: "icon-feather-help-circle" }),
+                    _vm._v(" Help\n              ")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("li", [
+                  _c("a", { attrs: { href: "page-login.html" } }, [
+                    _c("i", { staticClass: "icon-feather-log-out" }),
+                    _vm._v(" Sing Out\n              ")
+                  ])
                 ])
-              ]
-            )
-          ])
-        ])
-      ]
-    )
+              ])
+            ])
+          ]
+        )
+      ])
+    ])
   }
 ]
 render._withStripped = true
@@ -18693,8 +19020,10 @@ module.exports = g;
 var map = {
 	"./components/Courses/BrowseCourses.vue": "./resources/js/components/Courses/BrowseCourses.vue",
 	"./components/Courses/Episodes.vue": "./resources/js/components/Courses/Episodes.vue",
+	"./components/Courses/Tabs.vue": "./resources/js/components/Courses/Tabs.vue",
 	"./components/layouts/mobile/mobile-header.vue": "./resources/js/components/layouts/mobile/mobile-header.vue",
 	"./components/layouts/mobile/mobile-search.vue": "./resources/js/components/layouts/mobile/mobile-search.vue",
+	"./components/layouts/partials/Categories.vue": "./resources/js/components/layouts/partials/Categories.vue",
 	"./components/layouts/partials/SmoothScroll.vue": "./resources/js/components/layouts/partials/SmoothScroll.vue",
 	"./components/layouts/partials/search.vue": "./resources/js/components/layouts/partials/search.vue",
 	"./components/layouts/partials/side-nav.vue": "./resources/js/components/layouts/partials/side-nav.vue",
@@ -18737,6 +19066,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./routes */ "./resources/js/routes/index.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var _assets_custom_plugins__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./assets/custom-plugins */ "./resources/js/assets/custom-plugins.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
@@ -18763,6 +19093,8 @@ files.keys().map(function (key) {
 
 
 
+
+Vue.use(_assets_custom_plugins__WEBPACK_IMPORTED_MODULE_3__["default"]);
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   base: "/myschexpress/public",
   mode: "history",
@@ -18785,7 +19117,10 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 new Vue({
   el: "#wrapper",
   router: router,
-  store: _store__WEBPACK_IMPORTED_MODULE_2__["default"]
+  store: _store__WEBPACK_IMPORTED_MODULE_2__["default"],
+  created: function created() {
+    this.$store.dispatch("fetchCourses");
+  }
 });
 
 /***/ }),
@@ -18794,10 +19129,73 @@ new Vue({
 /*!***********************************************!*\
   !*** ./resources/js/assets/custom-plugins.js ***!
   \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _mixin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./mixin */ "./resources/js/assets/mixin.js");
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./helpers */ "./resources/js/assets/helpers.js");
 
 
+
+/* harmony default export */ __webpack_exports__["default"] = (Plugin.install = function () {
+  vue__WEBPACK_IMPORTED_MODULE_0___default.a.mixin(_mixin__WEBPACK_IMPORTED_MODULE_1__["default"]);
+  vue__WEBPACK_IMPORTED_MODULE_0___default.a.prototype.$helper = _helpers__WEBPACK_IMPORTED_MODULE_2__["default"];
+});
+
+/***/ }),
+
+/***/ "./resources/js/assets/helpers.js":
+/*!****************************************!*\
+  !*** ./resources/js/assets/helpers.js ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var helpers = {
+  slugify: function slugify(str, seperator) {
+    seperator = typeof seperator != "undefined" ? seperator : "-";
+    str = str.trim();
+    str = str.toLowerCase(); // remove accents, swap ñ for n, etc
+
+    var from = "åàáãäâèéëêìíïîòóöôùúüûñç·/_,:;";
+    var to = "aaaaaaeeeeiiiioooouuuunc------";
+
+    for (var i = 0, l = from.length; i < l; i++) {
+      str = str.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
+    }
+
+    return str.replace(/[^a-z0-9 -]/g, "") // remove invalid chars
+    .replace(/\s+/g, seperator) // collapse whitespace and replace by -
+    .replace(/-+/g, seperator) // collapse dashes
+    .replace(/^-+/, "") // trim - from start of text
+    .replace(/-+$/, "") // trim - from end of text
+    .replace(/-/g, seperator);
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (helpers);
+
+/***/ }),
+
+/***/ "./resources/js/assets/mixin.js":
+/*!**************************************!*\
+  !*** ./resources/js/assets/mixin.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+var mixin = {
+  methods: {//
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = (mixin);
 
 /***/ }),
 
@@ -18918,6 +19316,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Episodes_vue_vue_type_template_id_37d8155a___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Episodes_vue_vue_type_template_id_37d8155a___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Courses/Tabs.vue":
+/*!**************************************************!*\
+  !*** ./resources/js/components/Courses/Tabs.vue ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Tabs_vue_vue_type_template_id_047a0900___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Tabs.vue?vue&type=template&id=047a0900& */ "./resources/js/components/Courses/Tabs.vue?vue&type=template&id=047a0900&");
+/* harmony import */ var _Tabs_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Tabs.vue?vue&type=script&lang=js& */ "./resources/js/components/Courses/Tabs.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Tabs_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Tabs_vue_vue_type_template_id_047a0900___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Tabs_vue_vue_type_template_id_047a0900___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Courses/Tabs.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Courses/Tabs.vue?vue&type=script&lang=js&":
+/*!***************************************************************************!*\
+  !*** ./resources/js/components/Courses/Tabs.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Tabs_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./Tabs.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Courses/Tabs.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Tabs_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Courses/Tabs.vue?vue&type=template&id=047a0900&":
+/*!*********************************************************************************!*\
+  !*** ./resources/js/components/Courses/Tabs.vue?vue&type=template&id=047a0900& ***!
+  \*********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Tabs_vue_vue_type_template_id_047a0900___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./Tabs.vue?vue&type=template&id=047a0900& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Courses/Tabs.vue?vue&type=template&id=047a0900&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Tabs_vue_vue_type_template_id_047a0900___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Tabs_vue_vue_type_template_id_047a0900___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -19056,6 +19523,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_mobile_search_vue_vue_type_template_id_1df8a217___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_mobile_search_vue_vue_type_template_id_1df8a217___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/layouts/partials/Categories.vue":
+/*!*****************************************************************!*\
+  !*** ./resources/js/components/layouts/partials/Categories.vue ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Categories_vue_vue_type_template_id_10651c58___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Categories.vue?vue&type=template&id=10651c58& */ "./resources/js/components/layouts/partials/Categories.vue?vue&type=template&id=10651c58&");
+/* harmony import */ var _Categories_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Categories.vue?vue&type=script&lang=js& */ "./resources/js/components/layouts/partials/Categories.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Categories_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Categories_vue_vue_type_template_id_10651c58___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Categories_vue_vue_type_template_id_10651c58___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/layouts/partials/Categories.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/layouts/partials/Categories.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************!*\
+  !*** ./resources/js/components/layouts/partials/Categories.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Categories_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Categories.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/layouts/partials/Categories.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Categories_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/layouts/partials/Categories.vue?vue&type=template&id=10651c58&":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/layouts/partials/Categories.vue?vue&type=template&id=10651c58& ***!
+  \************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Categories_vue_vue_type_template_id_10651c58___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Categories.vue?vue&type=template&id=10651c58& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/layouts/partials/Categories.vue?vue&type=template&id=10651c58&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Categories_vue_vue_type_template_id_10651c58___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Categories_vue_vue_type_template_id_10651c58___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -19330,7 +19866,31 @@ var routes = [{
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var actions = {//
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+var actions = {
+  fetchCourses: function fetchCourses(_ref) {
+    var commit, courses;
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function fetchCourses$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            commit = _ref.commit;
+            _context.next = 3;
+            return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.get("/courses/all"));
+
+          case 3:
+            courses = _context.sent;
+            commit("setCourses", courses.data);
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    });
+  }
 };
 /* harmony default export */ __webpack_exports__["default"] = (actions);
 
@@ -19363,26 +19923,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _assets_custom_plugins__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../assets/custom-plugins */ "./resources/js/assets/custom-plugins.js");
-/* harmony import */ var _assets_custom_plugins__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_assets_custom_plugins__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _states__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./states */ "./resources/js/store/states.js");
-/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./mutations */ "./resources/js/store/mutations.js");
-/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./actions */ "./resources/js/store/actions.js");
-/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./getters */ "./resources/js/store/getters.js");
+/* harmony import */ var _states__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./states */ "./resources/js/store/states.js");
+/* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./mutations */ "./resources/js/store/mutations.js");
+/* harmony import */ var _actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./actions */ "./resources/js/store/actions.js");
+/* harmony import */ var _getters__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./getters */ "./resources/js/store/getters.js");
 
 
 
 
 
 
-
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(_assets_custom_plugins__WEBPACK_IMPORTED_MODULE_2___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
-  state: _states__WEBPACK_IMPORTED_MODULE_3__["default"],
-  mutations: _mutations__WEBPACK_IMPORTED_MODULE_4__["default"],
-  actions: _actions__WEBPACK_IMPORTED_MODULE_5__["default"],
-  getters: _getters__WEBPACK_IMPORTED_MODULE_6__["default"],
+  state: _states__WEBPACK_IMPORTED_MODULE_2__["default"],
+  mutations: _mutations__WEBPACK_IMPORTED_MODULE_3__["default"],
+  actions: _actions__WEBPACK_IMPORTED_MODULE_4__["default"],
+  getters: _getters__WEBPACK_IMPORTED_MODULE_5__["default"],
   modules: {}
 }));
 
@@ -19397,7 +19953,22 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var mutations = {//
+var mutations = {
+  setCourses: function setCourses(state, payload) {
+    var courses = payload.courses;
+    state.courses = courses;
+    state.tags = payload.tags;
+    courses.map(function (course) {
+      if (state.categories.some(function (item) {
+        return item.id === course.category.id;
+      })) // Filter the array and skip existing categories
+        return;
+      state.categories.push(course.category);
+    });
+    state.featuredCourse = courses.filter(function (item) {
+      return item.is_featured == true;
+    })[0];
+  }
 };
 /* harmony default export */ __webpack_exports__["default"] = (mutations);
 
@@ -19412,7 +19983,11 @@ var mutations = {//
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var states = {//
+var states = {
+  featuredCourse: {},
+  categories: [],
+  courses: [],
+  tags: []
 };
 /* harmony default export */ __webpack_exports__["default"] = (states);
 
