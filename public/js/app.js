@@ -167,6 +167,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log("watching...", val);
       },
       deep: true // Next task watch this prop so that fetchCourses action can update if this property is not empty
+      // Start NPM WATCH
 
     }
   },

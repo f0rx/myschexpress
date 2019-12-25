@@ -19,7 +19,7 @@ class CoursesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory('App\Instructor', 4)->create()->each(function ($instructor) {
+        factory(\App\Instructor::class, 5)->create()->each(function ($instructor) {
             // Push the Ids of each created Instructor into the array
             array_push($this->instructorIds, $instructor->id);
         });
@@ -32,7 +32,7 @@ class CoursesTableSeeder extends Seeder
             array_push($this->specialTags, App\Tag::create(['name' => $ex[$i], 'is_featured' => true])->id);
         }
 
-        factory('App\Course', 20)->create()->each(function ($course) {
+        factory(\App\Course::class, 20)->create()->each(function ($course) {
             for ($i = 0; $i < 2; $i++) { // Attach random tags to each course
                 $course->tags()->attach($this->specialTags[array_rand($this->specialTags)]);
             }
