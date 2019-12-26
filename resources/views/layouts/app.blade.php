@@ -8,17 +8,17 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicon -->
-    <link href="{{ asset('images/favicon.png') }}" rel="icon" type="image/png">
+    <link href="/images/favicon.png" rel="icon" type="image/png">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'My School Express') }}</title>
 
     <!-- CSS
     ================================================== -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/night-mode.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/framework.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/icons.css') }}">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/night-mode.css">
+    <link rel="stylesheet" href="/css/framework.css">
+    <link rel="stylesheet" href="/css/icons.css">
+    <link href="/css/app.css" rel="stylesheet">
     @stack('styles')
 
     <!-- icons
@@ -80,12 +80,12 @@
     <!-- javaScripts
     ================================================== -->
     <!-- Scripts -->
-    <script src="{{ asset('js/bootstrap.js') }}"></script>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('js/framework.js') }}"></script>
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/simplebar.js') }}"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/framework.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/simplebar.js"></script>
+    <script src="/js/main.js"></script>
 
     @stack('script')
 </body>
