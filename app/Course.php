@@ -20,8 +20,9 @@ class Course extends Model
      */
     private $instructors;
 
-    public function __construct()
+    public function __construct($attributes = [])
     {
+        parent::__construct($attributes);
         $this->tabs = [];
         $this->instructors = [];
     }
