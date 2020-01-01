@@ -50,7 +50,7 @@ return [
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'myschxpress'),
             'username' => env('DB_USERNAME', 'onekode'),
-            'password' => env('DB_PASSWORD', 'septembeR123'),
+            'password' => env('DB_PASSWORD', '98e85bd2'),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
