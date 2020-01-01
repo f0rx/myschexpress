@@ -93,3 +93,30 @@ class Status {
 }
 
 export default Status;
+
+
+
+
+
+
+
+
+
+/////////////
+Files to reedit before pushing to heroku
+*composer.json => Move "fzaninotto/faker": "^1.4", to "require" section
+*app.php => add 'log' => 'errorlog', below "debug"
+*database.php => replace =========>
+
+    'host' => env('DB_HOST', 'db4free.net'),
+    'port' => env('DB_PORT', '3306'),
+    'database' => env('DB_DATABASE', 'myschxpress'),
+    'username' => env('DB_USERNAME', 'onekode'),
+    'password' => env('DB_PASSWORD', 'septembeR123'),
+
+    with previous
+
+* app.blade.php => make all links absolute
+E.g:
+    <link rel="stylesheet" href="/css/framework.css">
+    <link rel="stylesheet" href="/css/icons.css">

@@ -12,7 +12,6 @@ class CategoriesTableSeeder extends Seeder
     public function run()
     {
         $this->command->info('Creating Categories...');
-        $this->command->info(' ');
 
         factory('App\Category', 10)->create()->each(function ($category) {
 
@@ -21,12 +20,8 @@ class CategoriesTableSeeder extends Seeder
             for ($i = 0; $i <= 2; $i++) { // Run this loop twice - applies only two tags to each Category
                 $category->tags()->attach(mt_rand(1, App\Tag::all()->count()));
             }
-
-            $this->command->info($category->name . ' tags generated!');
-            $this->command->info(' ');
         });
 
-        $this->command->info('Categories Table Seeded!');
         $this->command->info(' ');
     }
 }

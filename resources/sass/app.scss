@@ -6,3 +6,10 @@
 
 // Bootstrap
 // @import '~bootstrap/scss/bootstrap';
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media (min-width: 641px) and (max-width: 961px) {
+    div.course-card-body {
+        padding: 8px 12px !important;
+    }
+}

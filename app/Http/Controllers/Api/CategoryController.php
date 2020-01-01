@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Course;
+use App\Tag;
 use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class CourseController extends Controller
+class CategoryController extends Controller
 {
-    private $paginate;
+    private $tags;
+
 
     public function __construct()
     {
-        $this->paginate = 12;
+        $this->tags = ['Latest'];
     }
 
     /**
@@ -23,17 +24,14 @@ class CourseController extends Controller
      */
     public function index()
     {
-        return Course::latest()->paginate($this->paginate);
-    }
+        Tag::whereIsFeatured(true)->get()->each(function ($tag) {
+            array_push($this->tags, $tag->name);
+        });
 
-    /**
-     * Display a listing of the resource based on Category/Topic
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function categorize(Category $category)
-    {
-        return $category->courses()->paginate($this->paginate);
+        return response()->json([
+            'tags' => $this->tags,
+            'categories' => Category::orderBy('name', 'ASC')->get(),
+        ]);
     }
 
     /**
@@ -60,10 +58,10 @@ class CourseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Course  $course
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function show(Course $course)
+    public function show(Category $category)
     {
         //
     }
@@ -71,10 +69,10 @@ class CourseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Course  $course
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Course $course)
+    public function edit(Category $category)
     {
         //
     }
@@ -83,10 +81,10 @@ class CourseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Course  $course
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Course $course)
+    public function update(Request $request, Category $category)
     {
         //
     }
@@ -94,10 +92,10 @@ class CourseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Course  $course
+     * @param  \App\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Course $course)
+    public function destroy(Category $category)
     {
         //
     }

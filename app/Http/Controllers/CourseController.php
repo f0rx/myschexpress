@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\Category;
 use App\Instructor;
+use ArrayObject;
 use Illuminate\Http\Request;
 
 class CourseController extends Controller
@@ -26,7 +27,8 @@ class CourseController extends Controller
      */
     public function categorize(Category $category)
     {
-        return view('courses.categorize', compact('category'));
+        // $category = $category->with('courses');
+        return view('courses.show-category', compact('category'));
     }
 
     /**
@@ -60,7 +62,7 @@ class CourseController extends Controller
      */
     public function show(Category $category, Instructor $author, Course $course)
     {
-        dd($category, $author, $course);
+        dd("Course Detail");
     }
 
     /**

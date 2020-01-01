@@ -54,8 +54,9 @@
 
             <div class="section-small pt-0">
                 <div class="course-grid-slider" uk-slider>
+                    {{-- <smooth-scroll text="{{ $featuredCategory->name }}" link="{{ route('courses.categorize', $featuredCategory) }}" highlight="Courses"></smooth-scroll> --}}
                     <smooth-scroll highlight="Courses"></smooth-scroll>
-                    <browse-courses x-class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid"></browse-courses>
+                    <browse-courses :cat-courses="{{ $featuredCourses }}" m-class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid"></browse-courses>
                 </div>
             </div>
 
@@ -63,6 +64,15 @@
         </div>
     </div>
 @endsection
+
+@push('script')
+    <script>
+        // Event.$emit('featuredCoursesReceived', '{!! $featuredCourses !!}');
+    </script>
+        {{-- Find a way to send $featuredCategory to "Smoothscroll" via window.Event --}}
+        {{-- Keep working in this later --}}
+@endpush
+
 
 @push('styles')
     <style>

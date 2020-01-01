@@ -19,16 +19,18 @@ export default {
 
   methods: {
     route(category) {
-      return `${process.env.MIX_BASE_URL}/courses/${category.slug}/u/0`;
+      return `/courses/${category.slug}/u/0`;
     }
   },
 
   created() {
     this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "setCourses" && state.courses != null) {
+      if (mutation.type === "setCategories" && state.courses != null) {
         this.categories = state.categories;
       }
     });
+
+    this.$store.dispatch("fetchCategories");
   }
 };
 </script>

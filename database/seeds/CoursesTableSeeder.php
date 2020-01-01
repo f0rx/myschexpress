@@ -19,20 +19,28 @@ class CoursesTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(\App\Instructor::class, 5)->create()->each(function ($instructor) {
-            // Push the Ids of each created Instructor into the array
-            array_push($this->instructorIds, $instructor->id);
-        });
+        $this->command->info('Creating Courses...');
 
-        $this->command->info('Instructors Table Seeded!');
-        $this->command->info(' ');
+        if (App\Instructor::all()->count() < 1)
+            $this->call(InstructorsTableSeeder::class);
+        $this->command->info('Instructors Table has been Seeded!');
+
+        foreach (App\Instructor::all() as $instructor) {
+            array_push($this->instructorIds, $instructor->id);
+        }
 
         $ex = ['Most Popular', 'Free', 'Premium'];
         for ($i = 0; $i < count($ex); $i++) {
             array_push($this->specialTags, App\Tag::create(['name' => $ex[$i], 'is_featured' => true])->id);
         }
 
-        factory(\App\Course::class, 20)->create()->each(function ($course) {
+        /* When seeding for eztra data */
+
+        // foreach (App\Tag::whereIsFeatured(true)->get() as $ex) {
+        //     array_push($this->specialTags, $ex->id);
+        // }
+
+        factory(\App\Course::class, 1500)->create()->each(function ($course) {
             for ($i = 0; $i < 2; $i++) { // Attach random tags to each course
                 $course->tags()->attach($this->specialTags[array_rand($this->specialTags)]);
             }
@@ -41,7 +49,7 @@ class CoursesTableSeeder extends Seeder
                 $course->instructors()->attach($this->instructorIds[array_rand($this->instructorIds)]);
             }
         });
-        $this->command->info('Courses Table Seeded!');
+
         $this->command->info(' ');
     }
 }

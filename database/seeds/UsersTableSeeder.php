@@ -12,7 +12,6 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         factory('App\User', 10)->create();
-        $this->command->info('Users Table Seeded!');
         $this->command->info(' ');
     }
 }

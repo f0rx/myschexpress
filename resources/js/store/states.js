@@ -2,7 +2,8 @@ const states = {
     featuredCourse: {},
     categories: [],
     courses: [],
-    tags: []
+    tags: [],
+    paginator: {}
 };
 
 export default states;

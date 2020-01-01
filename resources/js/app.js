@@ -55,6 +55,6 @@ new Vue({
     router,
     store,
     created() {
-        this.$store.dispatch("fetchCourses");
+        // this.$store.dispatch("fetchCourses");
     }
 });

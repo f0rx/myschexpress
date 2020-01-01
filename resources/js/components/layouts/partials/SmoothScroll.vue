@@ -7,7 +7,7 @@
       </h4>
     </div>
     <div class="grid-slider-header-link">
-      <a href="courses" class="button transparent uk-visible@m">View all</a>
+      <a :href="realLink" class="button transparent uk-visible@m">View all</a>
       <a href="#" class="slide-nav-prev" uk-slider-item="previous"></a>
       <a href="#" class="slide-nav-next" uk-slider-item="next"></a>
     </div>
@@ -59,10 +59,8 @@ export default {
   },
 
   created() {
-    this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "setCourses" && state.courses != null) {
-        this.featuredCourse = state.featuredCourse;
-      }
+    Event.$on("featuredCoursesReceived", data => {
+      this.featuredCourse = data;
     });
   }
 };

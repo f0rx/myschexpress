@@ -1,5 +1,5 @@
 <template>
-  <div :class="xClass" uk-grid>
+  <div :class="mClass" uk-grid>
     <div v-for="(course, index) in courses" :key="index">
       <a :href="route(course)">
         <div class="course-card">
@@ -20,7 +20,7 @@
               </div>
             </div>
             <h4 v-html="course.title"></h4>
-            <p v-html="course.summary"></p>
+            <p v-html="course.summary" style="text-align: justify; text-justify: auto"></p>
             <div class="course-card-footer">
               <h5>
                 <i class="icon-feather-film"></i> 12 Lectures
@@ -45,25 +45,29 @@ export default {
   },
 
   props: {
-    xClass: {
+    mClass: {
       type: String,
       required: false
     },
 
-    coursesProp: {
-      type: Array,
-      require: false
+    catCourses: {
+      type: Object,
+      require: false,
+      default: () => null
     }
   },
 
   watch: {
-    coursesProp: {
-      handler(val) {
-        console.log("watching...", val);
-      },
-      deep: true
-      // Next task watch this prop so that fetchCourses action can update if this property is not empty
-      // Start NPM WATCH
+    catCourses: {
+      immediate: true, // Immediately set a watcher when page loads
+      deep: true, // Watch nested properties deeply nested
+      handler(newVal, oldVal) {
+        let thisCategory = this.catCourses;
+        // Ensure the prop "catCategories" was passed, then make a commit to vuex
+        thisCategory != null
+          ? this.$store.commit("setCourses", thisCategory)
+          : this.$store.dispatch("fetchCourses"); // Else just do nothing
+      }
     }
   },
 
@@ -73,7 +77,7 @@ export default {
       let category_slug = course.category.slug;
       let course_slug = course.slug;
       let author_slug = course.authors[0].id;
-      return `${process.env.MIX_BASE_URL}/courses/${category_slug}/${author_slug}/${course_slug}`;
+      return `/courses/${category_slug}/${author_slug}/${course_slug}`;
     },
 
     bookmarkCourse(course, event) {
@@ -83,27 +87,38 @@ export default {
   },
 
   created() {
+    this.courses = this.$store.state.courses;
     this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "setCourses" && state.courses != null) {
-        this.courses =
-          this.coursesProp != null ? this.coursesProp : state.courses;
-      }
+      if (mutation.type === "setCourses" && state.courses != null)
+        this.courses = state.courses; // Watch for changes and update fragment
     });
 
     Event.$on("selected", data => {
+      // "data" here will be sth like => "Latest", "Most popular", "Discount"
+      // Listen for "selected" event when user navigates tab
       if (data.includes("Latest")) {
+        /*
+                When user switches to "Latest" tab
+                Get all in store (Because the courses in store will always be in DESC order)
+                */
         this.courses = this.$store.state.courses;
         return;
       }
 
-      let shuffle = [];
+      let shuffle = []; // Creates empty array for map
       this.$store.state.courses.map(course => {
+        /*
+                Here, the real logic happens,
+                For each "course" object in the store
+                    loop through the "tabs" attribute
+                        Push courses whose tabs[] contains the "data" parameter above
+                */
         course.tabs.map(tag => {
           if (tag.includes(data)) shuffle.push(course);
         });
       });
 
-      this.courses = shuffle;
+      this.courses = shuffle; // Update the list
     });
   }
 };

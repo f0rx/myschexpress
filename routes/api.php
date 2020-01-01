@@ -8,10 +8,15 @@ use Illuminate\Http\Request;
 // });
 
 Route::prefix('courses')->name('courses.')->namespace('Api')->group(function () {
-    Route::get('/all/{tag?}', 'CourseController@index');
-    Route::get('/{category}/all{tag?}', 'CourseController@categorize');
-    Route::get('/topTags', 'TagController@active');
+    Route::get('/all', 'CourseController@index');
+    Route::get('/{category}/u/0', 'CourseController@categorize')->name('categorize');
     Route::get('/{category}/{instructor}/{course}', 'CourseController@show');
+    Route::get('/delete', 'CourseController@delete');
+    Route::get('/destroy', 'CourseController@destroy');
+});
+
+Route::prefix('categories')->namespace('Api')->group(function () {
+    Route::get('/', "CategoryController@index");
     Route::get('/delete', 'CourseController@delete');
     Route::get('/destroy', 'CourseController@destroy');
 });

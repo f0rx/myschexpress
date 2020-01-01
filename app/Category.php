@@ -16,7 +16,7 @@ class Category extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'slug', 'summary'
+        'name', 'slug', 'is_featured', 'summary'
     ];
 
     /**
@@ -72,7 +72,7 @@ class Category extends Model
     // Each Category hasMany Courses
     public function courses()
     {
-        return $this->hasMany('App\Course');
+        return $this->hasMany('App\Course')->latest();
     }
 
     // Each Category can have many Tags

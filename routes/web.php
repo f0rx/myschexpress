@@ -9,8 +9,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('courses')->name('courses.')->group(function () {
     Route::get('/', 'CourseController@index')->name('index');
     Route::get('/{category}/u/0', 'CourseController@categorize')->name('categorize');
-    Route::redirect('/{category}/u', '/myschexpress/public/courses/{category}/u/0');
-    Route::redirect('/{category}', '/myschexpress/public/courses/{category}/u/0');
+    Route::redirect('/{category}', '/courses/{category}/u/0'); // Redirect to "categorize"
+    Route::redirect('/{category}/u', '/courses/{category}/u/0'); // Redirect to "categorize"
     Route::get('/create', 'CourseController@create')->name('create');
     Route::post('/', 'CourseController@store')->name('store');
     Route::get('/edit', 'CourseController@edit')->name('edit');
