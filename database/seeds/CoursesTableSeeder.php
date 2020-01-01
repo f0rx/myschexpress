@@ -40,7 +40,7 @@ class CoursesTableSeeder extends Seeder
         //     array_push($this->specialTags, $ex->id);
         // }
 
-        factory(\App\Course::class, 100)->create()->each(function ($course) {
+        factory(\App\Course::class, 1500)->create()->each(function ($course) {
             for ($i = 0; $i < 2; $i++) { // Attach random tags to each course
                 $course->tags()->attach($this->specialTags[array_rand($this->specialTags)]);
             }
