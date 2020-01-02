@@ -18,20 +18,26 @@
                     <smooth-scroll text="Popular" highlight="Topics" link="course-path.html" ></smooth-scroll>
 
                     <ul class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid">
+                        <?php
+                            $rand = ['android_#dd0031', 'node-js_#64d25d', 'html5_#f0653f', 'js-square_#f7df1e', 'angular_#dd0031'];
+                        ?>
+                        @foreach ($categories as $category)
+                            <?php $value = preg_split('/_/', $rand[array_rand($rand)]); ?>
+                            <li>
+                                <a href="#" class="skill-card">
+                                    <i class="icon-brand-{{ $value[0] }} skill-card-icon" style="color:{{ $value[1] }}"></i>
+                                    <div>
+                                        <h2 class="skill-card-title">{{ str_limit($category->name, 15) }}</h2>
+                                        <p class="skill-card-subtitle"> {{ $category->courses->count() }} courses <span
+                                                class="skill-card-bullet"></span> 3
+                                            bundles
+                                        </p>
+                                    </div>
+                                </a>
+                            </li>
+                        @endforeach
                         <li>
-                            <a href="course-path-level.html" class="skill-card">
-                                <i class="icon-brand-android skill-card-icon" style="color:#dd0031"></i>
-                                <div>
-                                    <h2 class="skill-card-title"> Angular Courses</h2>
-                                    <p class="skill-card-subtitle"> 5 courses <span
-                                            class="skill-card-bullet"></span> 3
-                                        bundles
-                                    </p>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="course-path-level.html" class="skill-card">
+                            <a href="#" class="skill-card">
                                 <i class="icon-brand-node-js skill-card-icon" style="color:#64d25d"></i>
                                 <div>
                                     <h2 class="skill-card-title"> NodeJS Courses</h2>
@@ -54,7 +60,6 @@
 
             <div class="section-small pt-0">
                 <div class="course-grid-slider" uk-slider>
-                    {{-- <smooth-scroll text="{{ $featuredCategory->name }}" link="{{ route('courses.categorize', $featuredCategory) }}" highlight="Courses"></smooth-scroll> --}}
                     <smooth-scroll highlight="Courses"></smooth-scroll>
                     <browse-courses :cat-courses="{{ $featuredCourses }}" m-class="uk-slider-items uk-child-width-1-4@m uk-child-width-1-3@s uk-grid"></browse-courses>
                 </div>
@@ -64,15 +69,6 @@
         </div>
     </div>
 @endsection
-
-@push('script')
-    <script>
-        // Event.$emit('featuredCoursesReceived', '{!! $featuredCourses !!}');
-    </script>
-        {{-- Find a way to send $featuredCategory to "Smoothscroll" via window.Event --}}
-        {{-- Keep working in this later --}}
-@endpush
-
 
 @push('styles')
     <style>

@@ -83,4 +83,9 @@ class User extends Authenticatable implements MustVerifyEmail
             ? Instructor::with('user')->whereUserId($user->id)->first()
             : Instructor::with('user')->whereUserId($user)->first();
     }
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
+    }
 }

@@ -27,7 +27,6 @@ class CourseController extends Controller
      */
     public function categorize(Category $category)
     {
-        // $category = $category->with('courses');
         return view('courses.show-category', compact('category'));
     }
 
@@ -62,7 +61,7 @@ class CourseController extends Controller
      */
     public function show(Category $category, Instructor $author, Course $course)
     {
-        dd("Course Detail");
+        return view('courses.show', compact(['category', 'author', 'course']));
     }
 
     /**

@@ -12,11 +12,12 @@
         "cviebrock/eloquent-sluggable": "^6.0",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
+        "fzaninotto/faker": "^1.4",
         "guzzlehttp/guzzle": "^6.5",
         "laravel/framework": "^6.2",
+        "laravel/helpers": "^1.1",
         "laravel/passport": "^8.0",
         "laravel/tinker": "^2.0",
-        "fzaninotto/faker": "^1.4",
         "pusher/pusher-php-server": "^4.1",
         "santigarcor/laratrust": "^5.2",
         "venturecraft/revisionable": "^1.33"

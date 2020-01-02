@@ -31,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
             $category = Category::whereIsFeatured(true)->with('courses')->first();
             $view->with('featuredCategory', $category);
             $view->with('featuredCourses', json_encode($category->courses()->paginate(7)));
+
+            $view->with('categories', Category::with('courses')->take(6)->get());
         });
     }
 }

@@ -7,7 +7,7 @@
             uk-toggle="target: #wrapper ; cls: mobile-active"
         ></span>
 
-        <a href="dashboard.html" class="logo">
+        <a href="/" class="logo">
             <i class="uil-graduation-hat"></i> Courseplus
         </a>
 
