@@ -30,8 +30,7 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('home.welcome', function ($view) {
             $category = Category::whereIsFeatured(true)->with('courses')->first();
             $view->with('featuredCategory', $category);
-            dd($category);
-            // $view->with('featuredCourses', json_encode($category->courses()->paginate(7)));
+            $view->with('featuredCourses', json_encode($category->courses()->paginate(7)));
         });
     }
 }
