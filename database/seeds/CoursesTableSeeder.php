@@ -29,18 +29,18 @@ class CoursesTableSeeder extends Seeder
             array_push($this->instructorIds, $instructor->id);
         }
 
-        $ex = ['Most Popular', 'Free', 'Premium'];
-        for ($i = 0; $i < count($ex); $i++) {
-            array_push($this->specialTags, App\Tag::create(['name' => $ex[$i], 'is_featured' => true])->id);
-        }
+        // $ex = ['Most Popular', 'Free', 'Premium'];
+        // for ($i = 0; $i < count($ex); $i++) {
+        //     array_push($this->specialTags, App\Tag::create(['name' => $ex[$i], 'is_featured' => true])->id);
+        // }
 
         /* When seeding for eztra data */
 
-        // foreach (App\Tag::whereIsFeatured(true)->get() as $ex) {
-        //     array_push($this->specialTags, $ex->id);
-        // }
+        foreach (App\Tag::whereIsFeatured(true)->get() as $ex) {
+            array_push($this->specialTags, $ex->id);
+        }
 
-        factory(\App\Course::class, 60)->create()->each(function ($course) {
+        factory(\App\Course::class, 300)->create()->each(function ($course) {
             for ($i = 0; $i < 2; $i++) { // Attach random tags to each course
                 $course->tags()->attach($this->specialTags[array_rand($this->specialTags)]);
             }
